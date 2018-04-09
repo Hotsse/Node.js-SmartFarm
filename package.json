@@ -1,0 +1,41 @@
+{
+  "name": "smart_farm_server",
+  "version": "1.0.0",
+  "description": "Smart Farm Server",
+  "main": "index.js",
+  "author": "",
+  "files": [
+    "index.js",
+    "lib/"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "c-struct": "0.0.4",
+    "express": "4.15.3",
+    "kma-js":"1.0.4"
+  },
+  "engines": {
+    "node": ">= 4.0.0"
+  },
+  "config": {
+    "id":"35QZ9QxAuRcyFA",
+    "appPort": 60101,
+    "devicePort": 60102,
+    "camPort": 60103,
+    "weatherPos": {
+      "x": 35.582598,
+      "y": 127.233556
+    },
+    "mysql":{
+      "database":"berry",
+      "host":"localhost",
+      "port":"3306",
+      "user":"shoping",
+      "password":"qwer12#$"
+    },
+    "cam":[
+      "rtsp://admin:0000@210.117.181.247:8888/profile2/media.smp",
+      "rtsp://admin:0000@210.117.183.125:60110/profile2/media.smp"
+    ]
+  }
+}

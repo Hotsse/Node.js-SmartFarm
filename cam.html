@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+   <meta charset="UTF-8">
+   <title></title>
+   <style>
+      body {
+          background: #1c92d2; /* For browsers that do not support gradients */    
+          background: -webkit-linear-gradient(90deg, #1c92d2, #bbb); /* For Safari 5.1 to 6.0 */
+          background: -o-linear-gradient(90deg, #1c92d2, #bbb); /* For Opera 11.1 to 12.0 */
+          background: -moz-linear-gradient(90deg, #1c92d2, #bbb); /* For Firefox 3.6 to 15 */
+          background: linear-gradient(90deg, #1c92d2, #bbb); /* Standard syntax (must be last) */
+      }
+      select {
+         display: block;
+      }
+      canvas {
+         width:100%;
+         max-width:640;
+         height: auto;
+      }
+   </style>
+</head>
+<body id="body">
+
+<script>
+var d = new Date();
+var n = d.getHours();
+if(n >= 6 && n < 18){
+   //nothing to do...
+}
+else {
+   document.getElementById("body").style.background = "linear-gradient(90deg, #4b6cb7, #182848)";
+}
+</script>
+
+<div id="container"></div>
+<button id="add">+</button>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+      
+   var socket = io();
+   socket.on('start', function(cou) {
+      var container = document.getElementById('container');
+      document.getElementById('add').onclick = function() {
+         var divSocket
+            , div = document.createElement('div');
+         var html = '<select><option value="/">select cam</option>';
+         for (var i = 0; i < cou; i++) {
+            html += '<option value="/cam' + i + '">Cam ' + i + '</option>';
+         }
+         html += '</select>';
+         html += "<canvas width='640' height='360' controls preload='metadata'>";
+         
+         div.innerHTML = html;
+         var canvas = div.getElementsByTagName('canvas')[0], select = div.getElementsByTagName('select')[0];
+         select.onchange = function() {
+            if (divSocket) {
+               divSocket.disconnect();
+            }
+                console.log(this.value);
+            divSocket = io(location.origin + this.value);
+            divSocket.on('data', function(data) {
+            
+               var bytes = new Uint8Array(data);
+               
+               var blob = new Blob([bytes], {type: 'application/octet-binary'});
+               
+               var url = URL.createObjectURL(blob);
+               
+               var img = new Image;
+               
+               var ctx = canvas.getContext("2d");
+                              
+               img.onload = function() {
+                  URL.revokeObjectURL(url);
+                  ctx.drawImage(img,0,0);
+
+               };
+               
+               img.src = url;
+               
+            });
+         };
+         container.appendChild(div);
+      };
+   });
+</script>
+</body>
+</html>
